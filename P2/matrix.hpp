@@ -2,6 +2,7 @@
 #define MATRIX_HPP
 
 #include <vector>
+#include <cassert>
 
 template <typename T>
 class Matrix {
@@ -18,7 +19,7 @@ public:
 
     // submatrix constructor
     Matrix(T* base, size_t sub_size, size_t parent_step):
-        view_ptr(base), dim(sub_size), step(parent_step) {}
+        view_ptr(const_cast<T*>(base)), dim(sub_size), step(parent_step) {}
 
     // access element
     T& operator()(size_t row, size_t col) {
@@ -26,13 +27,42 @@ public:
         return view_ptr[row * step + col];
     }
 
-    // submatrix creation
-    Matrix submatrix(size_t start_r, size_t start_c, size_t new_size) {
-        assert(start_r + new_size < dim && start_c + new_size < dim
-               && start_r >= 0 && start_c >= 0); 
+    // getter for dimension
+    size_t getDim() const {
+        return dim;
+    }
 
-        return Matrix(view_ptr + start_r * step + start_c, new_size, step);
+    // submatrix creation
+    Matrix<T> submatrix(size_t start_r, size_t start_c, size_t new_size) const {
+        assert(start_r < dim && start_c < dim && start_r >= 0 && start_c >= 0);
+        return Matrix<T>(view_ptr + start_r * step + start_c, new_size, step);
     }
 };
+
+template<typename T>
+Matrix<T> matrix_add(const Matrix<T>& A, const Matrix<T>& B) {  // Add const
+    assert(A.getDim() == B.getDim());
+    size_t n = A.getDim();
+    Matrix<T> result(n);
+    for(size_t i = 0; i < n; ++i) {
+        for(size_t j = 0; j < n; ++j) {
+            result(i, j) = A(i, j) + B(i, j);
+        }
+    }
+    return result;
+}
+
+template<typename T>
+Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) {  // Add const
+    assert(A.getDim() == B.getDim());
+    size_t n = A.getDim();
+    Matrix<T> result(n);
+    for(size_t i = 0; i < n; ++i) {
+        for(size_t j = 0; j < n; ++j) {
+            result(i, j) = A(i, j) - B(i, j);
+        }
+    }
+    return result;
+}
 
 #endif // MATRIX_HPP
