@@ -8,6 +8,7 @@
 // 0 - reserved for autograder test
 // 5 - reserved for triagnle
 
+
 int main(int argc, char** argv) {
 
     // make sure we have correct args
@@ -55,7 +56,8 @@ int main(int argc, char** argv) {
 
     // triangle 
     if (custom == 5) {
-        // todo
+        std::cout << "average triangles: " << count_triangles(STANDARD_DIM, CURR_PROB, NUM_TRIALS) << std::endl;
+        std::cout << "expected average: " << N10224_CHOOSE_3 << std::endl;
     }
 
 
