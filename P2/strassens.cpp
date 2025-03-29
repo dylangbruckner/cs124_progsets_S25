@@ -5,7 +5,7 @@ Matrix<int> strassen_mult(const Matrix<int>& M1, const Matrix<int>& M2) {
     
     // base case: switch to standard multiplication
     if(n <= CUTOFF) {
-        // todo add call to standard mutliplication here
+        return matrix_mult(M1, M2);
     }
 
     // Split matrices into quarters

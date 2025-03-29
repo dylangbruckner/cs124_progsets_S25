@@ -76,4 +76,21 @@ Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) {  // Add const
     return result;
 }
 
+template<typename T> 
+Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
+    assert(A.getDim() == B.getDim());
+    size_t n = A.getDim();
+    Matrix<T> result(n);
+
+    for(size_t i = 0; i < n; ++i) {
+        for(size_t j = 0; j < n, ++j) {
+            T sum = T(); // Initialize sum to 0 
+            for(size_t k = 0; k < n, ++k) {
+                sum += A(i, k) * B(k, j);
+            }
+            result(i, j) = sum;
+        }
+    }
+}
+
 #endif // MATRIX_HPP
