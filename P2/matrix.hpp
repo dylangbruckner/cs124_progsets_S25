@@ -37,6 +37,17 @@ public:
         assert(start_r < dim && start_c < dim && start_r >= 0 && start_c >= 0);
         return Matrix<T>(view_ptr + start_r * step + start_c, new_size, step);
     }
+
+    // copies matrix
+    Matrix copy() const {
+        Matrix<T> copied(dim);  // Create a new matrix with the same dimension
+        for (size_t i = 0; i < dim; ++i) {
+            for (size_t j = 0; j < dim; ++j) {
+                copied(i, j) = (*this)(i, j);  // Copy each element
+            }
+        }
+        return copied;
+    }
 };
 
 template<typename T>
