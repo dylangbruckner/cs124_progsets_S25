@@ -1,6 +1,4 @@
-#include "strassens.hpp"
-#include <random>
-#include <limits>
+#include "triangle.hpp"
 
 Matrix<int> generate_random_graph(size_t dim, float probability) {
     Matrix<int> M1(dim);
