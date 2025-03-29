@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cassert>
+#include <cmath>
 
 template <typename T>
 class Matrix {
@@ -23,7 +24,11 @@ public:
 
     // access element
     T& operator()(size_t row, size_t col) {
-        assert(row < dim && col < dim && row >= 0 && col >= 0); 
+        assert(row < dim && col < dim); 
+        return view_ptr[row * step + col];
+    }
+    T operator()(size_t row, size_t col) const {
+        assert(row < dim && col < dim);
         return view_ptr[row * step + col];
     }
 
@@ -34,7 +39,7 @@ public:
 
     // submatrix creation
     Matrix<T> submatrix(size_t start_r, size_t start_c, size_t new_size) const {
-        assert(start_r < dim && start_c < dim && start_r >= 0 && start_c >= 0);
+        assert(start_r < dim && start_c < dim);
         return Matrix<T>(view_ptr + start_r * step + start_c, new_size, step);
     }
 
@@ -51,7 +56,7 @@ public:
 };
 
 template<typename T>
-Matrix<T> matrix_add(const Matrix<T>& A, const Matrix<T>& B) {  // Add const
+Matrix<T> matrix_add(const Matrix<T>& A, const Matrix<T>& B) { 
     assert(A.getDim() == B.getDim());
     size_t n = A.getDim();
     Matrix<T> result(n);
@@ -64,7 +69,7 @@ Matrix<T> matrix_add(const Matrix<T>& A, const Matrix<T>& B) {  // Add const
 }
 
 template<typename T>
-Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) {  // Add const
+Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) { 
     assert(A.getDim() == B.getDim());
     size_t n = A.getDim();
     Matrix<T> result(n);
@@ -83,14 +88,15 @@ Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
     Matrix<T> result(n);
 
     for(size_t i = 0; i < n; ++i) {
-        for(size_t j = 0; j < n, ++j) {
+        for(size_t j = 0; j < n; ++j) {
             T sum = T(); // Initialize sum to 0 
-            for(size_t k = 0; k < n, ++k) {
+            for(size_t k = 0; k < n; ++k) {
                 sum += A(i, k) * B(k, j);
             }
             result(i, j) = sum;
         }
     }
+    return result;
 }
 
 #endif // MATRIX_HPP

@@ -1,5 +1,5 @@
-#ifndef TRIANGLE.HPP
-#define TRIANGLE.HPP
+#ifndef TRIANGLE_HPP
+#define TRIANGLE_HPP
 
 
 #include "strassens.hpp"
@@ -19,4 +19,4 @@ Matrix<int> generate_random_graph(size_t dim, float probability);
 float count_triangles(size_t dim, float probability, size_t trials);
 
 
-#endif // TRIANGLE.HPP
+#endif // TRIANGLE_HPP

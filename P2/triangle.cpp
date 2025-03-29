@@ -17,15 +17,17 @@ Matrix<int> generate_random_graph(size_t dim, float probability) {
             }
         }
     }
+
+    return M1;
 }
 
 float count_triangles(size_t dim, float probability, size_t trials) {
     float count = 0.;   // total triangles across all trials
 
     for (size_t i = 0; i < trials; ++i) {
-        Matrix<int> M1 = generate_random_graph(dim, probability);
-        Matrix<int> M2 = M1.copy();
-        Matrix<int> M3 = M1.copy();
+        const Matrix<int> M1 = generate_random_graph(dim, probability);
+        const Matrix<int> M2 = M1.copy();
+        const Matrix<int> M3 = M1.copy();
 
         Matrix<int> A3 = strassen_mult(M1, strassen_mult(M2, M3));
 
