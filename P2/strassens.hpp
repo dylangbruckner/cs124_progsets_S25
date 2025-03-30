@@ -3,7 +3,7 @@
 #include "matrix.hpp"
 
 // The cutoff for where we use normal matrix multiplication
-const size_t CUTOFF = 2;
+const size_t CUTOFF = 0;
 
 // performs matrix multiplication according to strassens algorithm
 Matrix<int> strassen_mult(const Matrix<int>& M1, const Matrix<int>& M2);
