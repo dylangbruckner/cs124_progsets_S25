@@ -1,5 +1,4 @@
 #include "triangle.hpp"
-#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -33,21 +32,22 @@ int main(int argc, char** argv) {
         }
 
         // fill matrices A and B
-        Matrix<int> A(dim);
-        Matrix<int> B(dim);
         size_t padded_size = padding_calc(dim);
+        Matrix<int> A(padded_size);
+        Matrix<int> B(padded_size);
+        
 
         for (size_t i = 0; i < padded_size; ++i) {
             for (size_t j = 0; j < padded_size; ++j) {
                 // add padding or add element from file
-                if (i > dim || j > dim) {
+                if (i >= dim || j >= dim) {
                     A(i, j) = 0;
                 } else if (!(file >> A(i, j))) throw std::runtime_error("Invalid input file");
             }
         }
         for (size_t i = 0; i < padded_size; ++i) {
             for (size_t j = 0; j < padded_size; ++j) {
-                if (i > dim || j > dim) {
+                if (i >= dim || j >= dim) {
                     B(i, j) = 0;
                 } else if (!(file >> B(i, j))) throw std::runtime_error("Invalid input file");
             }
@@ -58,36 +58,40 @@ int main(int argc, char** argv) {
             std::cout << prod(i, i) << "\n";
         }
     } else if (custom == 1) { // testing
-        size_t MATRIX_SIZE = 4;
+        size_t MATRIX_SIZE = 5;
         int MATRIX_VAL = 1;
 
-        Matrix<int> A(MATRIX_SIZE);
-        Matrix<int> B(MATRIX_SIZE);
         size_t padded_size = padding_calc(MATRIX_SIZE);
+        Matrix<int> A(padded_size);
+        Matrix<int> B(padded_size);
+        
 
         for (size_t i = 0; i < padded_size; ++i) {
             for (size_t j = 0; j < padded_size; ++j) {
                 // add padding or add element from file
-                if (i > MATRIX_SIZE || j > MATRIX_SIZE) {
+                if (i >= MATRIX_SIZE || j >= MATRIX_SIZE) {
                     A(i, j) = 0;
                 } else A(i, j) = MATRIX_VAL;
+                std::cout << A(i, j);
             }
+            std::cout << "\n";
         }
         for (size_t i = 0; i < padded_size; ++i) {
             for (size_t j = 0; j < padded_size; ++j) {
-                if (i > MATRIX_SIZE || j > MATRIX_SIZE) {
+                if (i >= MATRIX_SIZE || j >= MATRIX_SIZE) {
                     B(i, j) = 0;
-                } else A(i, j) = MATRIX_VAL;
+                } else B(i, j) = MATRIX_VAL;
+                std::cout << B(i, j);
             }
+            std::cout << "\n";
         }
-        const Matrix<int> C = strassen_mult(A, B);
+        Matrix<int> C = strassen_mult(A, B);
 
-        for (size_t i = 0; i < padded_size; ++i) {
-            for (size_t j = 0; j < padded_size; ++j) {
-                if (i > MATRIX_SIZE || j > MATRIX_SIZE) {
-                    std::cout << C(i, j);
-                } else A(i, j) = MATRIX_VAL;
+        for (size_t i = 0; i < MATRIX_SIZE; ++i) {
+            for (size_t j = 0; j < MATRIX_SIZE; ++j) {
+                std::cout << C(i, j);
             }
+            std::cout << "\n";
         }
         std::cout << std::endl;
      

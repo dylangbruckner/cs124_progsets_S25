@@ -20,11 +20,12 @@ Matrix<int> strassen_mult(const Matrix<int>& M1, const Matrix<int>& M2) {
     auto G = M2.submatrix(half, 0, half);
     auto H = M2.submatrix(half, half, half);
 
+
     // compute intermediaries
-    Matrix<int> P1 = strassen_mult(matrix_sub(F, H), A);
+    Matrix<int> P1 = strassen_mult(A, matrix_sub(F, H));
     Matrix<int> P2 = strassen_mult(matrix_add(A, B), H);
-    Matrix<int> P3 = strassen_mult(matrix_add(C, D), H);
-    Matrix<int> P4 = strassen_mult(matrix_sub(G, E), D);
+    Matrix<int> P3 = strassen_mult(matrix_add(C, D), E);
+    Matrix<int> P4 = strassen_mult(D, matrix_sub(G, E));
     Matrix<int> P5 = strassen_mult(matrix_add(A, D), matrix_add(E, H));
     Matrix<int> P6 = strassen_mult(matrix_sub(B, D), matrix_add(G, H));
     Matrix<int> P7 = strassen_mult(matrix_sub(C, A), matrix_add(E, F));
@@ -38,10 +39,14 @@ Matrix<int> strassen_mult(const Matrix<int>& M1, const Matrix<int>& M2) {
     auto C21 = M.submatrix(half, 0, half);
     auto C22 = M.submatrix(half, half, half);
 
-    C11 = matrix_add(matrix_sub(matrix_add(P5, P4), P2), P6);
-    C12 = matrix_add(P1, P2);
-    C21 = matrix_add(P3, P4);
-    C22 = matrix_add(matrix_sub(P1, P3), matrix_add(P5, P7));
+    matrix_add_sub_in(P5, P4, C11);
+    matrix_sub_sub_in(C11, P2, C11);
+    matrix_add_sub_in(C11, P6, C11);
+    matrix_add_sub_in(P1, P2, C12);
+    matrix_add_sub_in(P3, P4, C21);
+    matrix_add_sub_in(P5, P7, C22);
+    matrix_sub_sub_in(C22, P3, C22);
+    matrix_add_sub_in(C22, P1, C22);
 
     return M;
 };

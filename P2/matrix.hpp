@@ -4,6 +4,7 @@
 #include <vector>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 template <typename T>
 class Matrix {
@@ -81,6 +82,28 @@ Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) {
     return result;
 }
 
+template<typename T>
+void matrix_add_sub_in(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target) { 
+    assert(A.getDim() == B.getDim());
+    size_t n = A.getDim();
+    for(size_t i = 0; i < n; ++i) {
+        for(size_t j = 0; j < n; ++j) {
+            Target(i, j) = A(i, j) + B(i, j);
+        }
+    }
+}
+
+template<typename T>
+void matrix_sub_sub_in(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target) { 
+    assert(A.getDim() == B.getDim());
+    size_t n = A.getDim();
+    for(size_t i = 0; i < n; ++i) {
+        for(size_t j = 0; j < n; ++j) {
+            Target(i, j) = A(i, j) - B(i, j);
+        }
+    }
+}
+
 template<typename T> 
 Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
     assert(A.getDim() == B.getDim());
@@ -97,6 +120,18 @@ Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
         }
     }
     return result;
+}
+
+// prints matrix up to dim values
+template<typename T> 
+void print_matrix(const Matrix<T>& A, size_t dim) {
+    for (size_t i = 0; i < dim; ++i) {
+        for (size_t j = 0; j < dim; ++j) {
+            std::cout << A(i, j);
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n" << std::endl;
 }
 
 #endif // MATRIX_HPP
