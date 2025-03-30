@@ -86,18 +86,15 @@ int main(int argc, char** argv) {
             std::cout << "\n";
         }
         Matrix<int> C = strassen_mult(A, B);
-
-        for (size_t i = 0; i < MATRIX_SIZE; ++i) {
-            for (size_t j = 0; j < MATRIX_SIZE; ++j) {
-                std::cout << C(i, j);
-            }
-            std::cout << "\n";
-        }
-        std::cout << std::endl;
+        print_matrix(C, MATRIX_SIZE);
      
     } else if (custom == 5) { // triangles
-        std::cout << "average triangles: " << count_triangles(STANDARD_DIM, CURR_PROB, NUM_TRIALS) << std::endl;
-        std::cout << "expected average: " << N10224_CHOOSE_3 << std::endl;
+        for (int i = 1; i < 6; ++i) {
+            std::cout << "probability of edge: " << CURR_PROB * i << "\n";
+            std::cout << "average triangles: " << count_triangles(STANDARD_DIM, CURR_PROB * i, NUM_TRIALS) << "\n";
+            std::cout << "expected average: " << N10224_CHOOSE_3 * pow(CURR_PROB * i, 3) << "\n" << "\n";
+        }
+        std::cout << std::endl;
     }
 }
 

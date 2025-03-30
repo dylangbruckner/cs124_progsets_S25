@@ -36,5 +36,5 @@ float count_triangles(size_t dim, float probability, size_t trials) {
         }
     }
 
-    return count / trials / 6;
+    return (count / trials) / 6;
 }

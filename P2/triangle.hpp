@@ -6,7 +6,7 @@
 #include <random>
 #include <limits>
 
-const size_t N10224_CHOOSE_3 = 178433024;
+const float N10224_CHOOSE_3 = 178433024.;
 const size_t STANDARD_DIM    = 1024;
 const float CURR_PROB        = 0.1;
 const size_t NUM_TRIALS      = 1;
