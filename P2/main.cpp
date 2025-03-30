@@ -95,8 +95,8 @@ int main(int argc, char** argv) {
         size_t testDim = std::stoi(argv[2]);
 
         for (int i = 0; i < 3; ++i) {
-            Matrix<int> testMatrix1 = generate_random_matrix<int>(20, i);
-            Matrix<int> testMatrix2 = generate_random_matrix<int>(20, i);
+            Matrix<int> testMatrix1 = generate_random_matrix<int>(testDim, i);
+            Matrix<int> testMatrix2 = generate_random_matrix<int>(testDim, i);
 
             auto start = std::chrono::high_resolution_clock::now();
             auto res = matrix_mult(testMatrix1, testMatrix2);
@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
             printf("Matrix %d w/ dim %u using normal mult: %lf\n", i, testDim, duration);
 
             start = std::chrono::high_resolution_clock::now();
-            res = strassen_mult(testMatrix1, testMatrix2);
+            res = strassen_mult_init(testMatrix1, testMatrix2);
             end = std::chrono::high_resolution_clock::now();
             duration = end - start;
             printf("Matrix %d w/ dim %u using   strassens: %lf\n\n\n", i, testDim, duration);

@@ -57,6 +57,7 @@ public:
     }
 };
 
+// addition and subtraction by creating new matrix
 template<typename T>
 Matrix<T> matrix_add(const Matrix<T>& A, const Matrix<T>& B) { 
     assert(A.getDim() == B.getDim());
@@ -69,7 +70,6 @@ Matrix<T> matrix_add(const Matrix<T>& A, const Matrix<T>& B) {
     }
     return result;
 }
-
 template<typename T>
 Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) { 
     assert(A.getDim() == B.getDim());
@@ -83,9 +83,10 @@ Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) {
     return result;
 }
 
+// addition and subtraction straight into matrix target
 template<typename T>
-void matrix_add_sub_in(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target) { 
-    assert(A.getDim() == B.getDim());
+void matrix_add_inplace(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target) { 
+    // assert(A.getDim() == B.getDim() == Target.getDim());
     size_t n = A.getDim();
     for(size_t i = 0; i < n; ++i) {
         for(size_t j = 0; j < n; ++j) {
@@ -95,12 +96,24 @@ void matrix_add_sub_in(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target
 }
 
 template<typename T>
-void matrix_sub_sub_in(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target) { 
-    assert(A.getDim() == B.getDim());
+void matrix_sub_inplace(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target) { 
+    // assert(A.getDim() == B.getDim() == Target.getDim());
     size_t n = A.getDim();
     for(size_t i = 0; i < n; ++i) {
         for(size_t j = 0; j < n; ++j) {
             Target(i, j) = A(i, j) - B(i, j);
+        }
+    }
+}
+
+// copy matrix A to target
+template<typename T>
+void matrix_inplace(const Matrix<T>& A, Matrix<T>& Target) {
+    assert(A.getDim() == Target.getDim());
+    size_t n = A.getDim();
+    for(size_t i = 0; i < n; ++i) {
+        for(size_t j = 0; j < n; ++j) {
+            Target(i, j) = A(i, j);
         }
     }
 }
@@ -121,6 +134,23 @@ Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
         }
     }
     return result;
+}
+// same as above but directly into Target
+template<typename T> 
+void matrix_mult_in_place(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Target) {
+    // assert(A.getDim() == B.getDim() == Target.getDim());
+    size_t n = A.getDim();
+
+    for(size_t i = 0; i < n; ++i) {
+        for(size_t j = 0; j < n; ++j) {
+            T sum = T(); // Initialize sum to 0 
+            for(size_t k = 0; k < n; ++k) {
+                sum += A(i, k) * B(k, j);
+            }
+            Target(i, j) = sum;
+        }
+    }
+    return;
 }
 
 // prints matrix up to dim values
