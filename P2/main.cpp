@@ -1,7 +1,10 @@
 #include "triangle.hpp"
+#include "matrix.hpp"
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <iostream>
+#include <chrono>
 
 // first argument
 // 0 - reserved for autograder test
@@ -95,6 +98,29 @@ int main(int argc, char** argv) {
         }
         std::cout << std::endl;
      
+    } else if (custom == 2) { // Testing experimental crossover
+        size_t testDim = std::stoi(argv[2]);
+
+        for (int i = 0; i < 3; ++i) {
+            Matrix<int> testMatrix1 = generate_random_matrix<int>(20, i);
+            Matrix<int> testMatrix2 = generate_random_matrix<int>(20, i);
+
+            auto start = std::chrono::high_resolution_clock::now();
+            auto res = matrix_mult(testMatrix1, testMatrix2);
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duration = end - start;
+            printf("Matrix %d w/ dim %u using normal mult: %lf\n", i, testDim, duration);
+
+            start = std::chrono::high_resolution_clock::now();
+            res = strassen_mult(testMatrix1, testMatrix2);
+            end = std::chrono::high_resolution_clock::now();
+            duration = end - start;
+            printf("Matrix %d w/ dim %u using   strassens: %lf\n\n\n", i, testDim, duration);
+
+        }
+
+
+        
     } else if (custom == 5) { // triangles
         std::cout << "average triangles: " << count_triangles(STANDARD_DIM, CURR_PROB, NUM_TRIALS) << std::endl;
         std::cout << "expected average: " << N10224_CHOOSE_3 << std::endl;

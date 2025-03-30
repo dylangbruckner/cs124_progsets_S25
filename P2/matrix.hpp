@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <random>
 
 template <typename T>
 class Matrix {
@@ -133,5 +134,50 @@ void print_matrix(const Matrix<T>& A, size_t dim) {
     }
     std::cout << "\n" << std::endl;
 }
+
+
+// Generates a random matrix
+// randomization_type flag controls number selection for each entry:
+// 0: 0 or 1
+// 1: 0, 1, or 2
+// 2: -1, 0, or 1
+template<typename T>
+Matrix<T> generate_random_matrix(size_t n, int randomization_type = 0) {
+    Matrix<T> m(n);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    switch (randomization_type) {
+        case 0: {
+            std::uniform_int_distribution<int> dis(0, 1);
+            for (size_t i = 0; i < n; ++i) {
+                for (size_t j = 0; j < n; ++j) {
+                    m(i, j) = static_cast<T>(dis(gen));
+                }
+            }
+        }
+        case 1: {
+            std::uniform_int_distribution<int> dis(0, 2);
+            for (size_t i = 0; i < n; ++i) {
+                for (size_t j = 0; j < n; ++j) {
+                    m(i, j) = static_cast<T>(dis(gen));
+                }
+            }
+        }
+        case 2: {
+            std::uniform_int_distribution<int> dis(-1, 1);
+            for (size_t i = 0; i < n; ++i) {
+                for (size_t j = 0; j < n; ++j) {
+                    m(i, j) = static_cast<T>(dis(gen));
+                }
+            }
+        }
+    }
+
+
+
+    return m;
+}
+
 
 #endif // MATRIX_HPP
