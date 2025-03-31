@@ -29,7 +29,7 @@ float count_triangles(size_t dim, float probability, size_t trials) {
         const Matrix<int> M2 = M1.copy();
         const Matrix<int> M3 = M1.copy();
 
-        Matrix<int> A3 = strassen_mult(M1, strassen_mult(M2, M3));
+        Matrix<int> A3 = strassen_mult_init(M1, strassen_mult_init(M2, M3));
 
         for (size_t j = 0; j < dim; ++j) {
             count += A3(j, j);

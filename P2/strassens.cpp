@@ -4,7 +4,7 @@
 // performs the recursive portion of Strassen's
 // should never be called outside of this file
 // to call, use strassen_mult_init 
-void strassen_mult_recursion(const Matrix<int>& M1, const Matrix<int>& M2, Matrix<int>& Res, const Matrix<int>& Storage);
+void strassen_mult_recursion(const Matrix<int>& M1, const Matrix<int>& M2, Matrix<int>& Res, const Matrix<int>& Storage, size_t cutoff);
 
 // make sure matrices passed into this are padded
 Matrix<int> strassen_mult_init(const Matrix<int>& M1, const Matrix<int>& M2) {
@@ -15,17 +15,21 @@ Matrix<int> strassen_mult_init(const Matrix<int>& M1, const Matrix<int>& M2) {
         return matrix_mult(M1, M2);
     }
     Matrix<int> result(n), storage(n);
-    strassen_mult_recursion(M1, M2, result, storage);
+
+    // TODO TEMP FOR TESTING:
+    size_t cutoff = n - 1;
+
+    strassen_mult_recursion(M1, M2, result, storage, cutoff);
     return result;
 }
 
-void strassen_mult_recursion(const Matrix<int>& M1, const Matrix<int>& M2, Matrix<int>& Res, const Matrix<int>& Storage) {
+void strassen_mult_recursion(const Matrix<int>& M1, const Matrix<int>& M2, Matrix<int>& Res, const Matrix<int>& Storage, size_t cutoff) {
     // assert(M1.getDim() == M2.getDim()); 
     // assert(Res.getDim() == Storage.getDim());
     // assert(M1.getDim() == Res.getDim());
 
     const size_t n = M1.getDim();
-    if(n <= CUTOFF) {
+    if(n <= cutoff) {
         matrix_mult_in_place(M1, M2, Res);
         return;
     }
@@ -56,32 +60,32 @@ void strassen_mult_recursion(const Matrix<int>& M1, const Matrix<int>& M2, Matri
     // P1
     matrix_inplace(A, SA); // A is new M1
     matrix_sub_inplace(F, H, SB); // F-H is new M2
-    strassen_mult_recursion(SA, SB, RB, SD); // add P1 to top right return
+    strassen_mult_recursion(SA, SB, RB, SD, cutoff); // add P1 to top right return
     matrix_inplace(RB, RD); // add to bottom right
 
     // P5
     matrix_add_inplace(A, D, SA); // A + D is new M1
     matrix_add_inplace(E, H, SB); // E + H is new M2
-    strassen_mult_recursion(SA, SB, RA, SD);  // add P5 to top left return
+    strassen_mult_recursion(SA, SB, RA, SD, cutoff);  // add P5 to top left return
     matrix_add_inplace(RA, RD, RD); // add to bottom right
 
     // P2
     matrix_add_inplace(A, B, SA); // same gist as above
     matrix_inplace(H, SB);
-    strassen_mult_recursion(SA, SB, SC, SD); // put into SD - must be manually moved 
+    strassen_mult_recursion(SA, SB, SC, SD, cutoff); // put into SD - must be manually moved 
     matrix_sub_inplace(RA, SC, RA);
     matrix_add_inplace(SC, RB, RB);
 
     // P3
     matrix_add_inplace(C, D, SA); 
     matrix_inplace(E, SB);        
-    strassen_mult_recursion(SA, SB, RC, SD); // add P3 to bottom left
+    strassen_mult_recursion(SA, SB, RC, SD, cutoff); // add P3 to bottom left
     matrix_sub_inplace(RD, RC, RD); 
 
     // P4
     matrix_inplace(D, SA);
     matrix_sub_inplace(G, E, SB);
-    strassen_mult_recursion(SA, SB, SC, SD);
+    strassen_mult_recursion(SA, SB, SC, SD, cutoff);
 
     matrix_add_inplace(SC, RA, RA);
     matrix_add_inplace(SC, RC, RC);
@@ -89,14 +93,14 @@ void strassen_mult_recursion(const Matrix<int>& M1, const Matrix<int>& M2, Matri
     // P6
     matrix_sub_inplace(B, D, SA);
     matrix_add_inplace(G, H, SB);
-    strassen_mult_recursion(SA, SB, SC, SD);
+    strassen_mult_recursion(SA, SB, SC, SD, cutoff);
 
     matrix_add_inplace(SC, RA, RA);
 
     // P7
     matrix_sub_inplace(C, A, SA);
     matrix_add_inplace(E, F, SB);
-    strassen_mult_recursion(SA, SB, SC, SD);
+    strassen_mult_recursion(SA, SB, SC, SD, cutoff);
 
     matrix_add_inplace(SC, RD, RD);
 

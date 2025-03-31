@@ -4,11 +4,12 @@
 #include <sstream>
 #include <string>
 #include <iostream>
-#include <chrono>
+#include "experiments.cpp"
 
 // first argument
 // 0 - reserved for autograder test
 // 1 - reserved for various testing
+// 2 - reserved for experimenting cutoff
 // 5 - reserved for triagnle
 
 
@@ -56,7 +57,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        Matrix<int> prod = strassen_mult(A, B);
+        Matrix<int> prod = strassen_mult_init(A, B);
         for (size_t i = 0; i < dim; ++i) {
             std::cout << prod(i, i) << "\n";
         }
@@ -88,32 +89,11 @@ int main(int argc, char** argv) {
             }
             std::cout << "\n";
         }
-        Matrix<int> C = strassen_mult(A, B);
+        Matrix<int> C = strassen_mult_init(A, B);
         print_matrix(C, MATRIX_SIZE);
      
     } else if (custom == 2) { // Testing experimental crossover
-        size_t testDim = std::stoi(argv[2]);
-
-        for (int i = 0; i < 3; ++i) {
-            Matrix<int> testMatrix1 = generate_random_matrix<int>(testDim, i);
-            Matrix<int> testMatrix2 = generate_random_matrix<int>(testDim, i);
-
-            auto start = std::chrono::high_resolution_clock::now();
-            auto res = matrix_mult(testMatrix1, testMatrix2);
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> duration = end - start;
-            printf("Matrix %d w/ dim %u using normal mult: %lf\n", i, testDim, duration);
-
-            start = std::chrono::high_resolution_clock::now();
-            res = strassen_mult_init(testMatrix1, testMatrix2);
-            end = std::chrono::high_resolution_clock::now();
-            duration = end - start;
-            printf("Matrix %d w/ dim %u using   strassens: %lf\n\n\n", i, testDim, duration);
-
-        }
-
-
-        
+        experiments();
     } else if (custom == 5) { // triangles
         for (int i = 1; i < 6; ++i) {
             std::cout << "probability of edge: " << CURR_PROB * i << "\n";
