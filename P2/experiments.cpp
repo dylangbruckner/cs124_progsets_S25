@@ -10,10 +10,10 @@
 void experiments() {
     size_t testDim = 2;
     for (int i = 0; i < 12; ++i) {
-        testDim = (testDim * 2) - 1;
+        testDim = (testDim * 2);
         for (int j = 0; j < 3; ++j) {
-            Matrix<int> testMatrix1 = generate_random_matrix<int>(testDim, j);
-            Matrix<int> testMatrix2 = generate_random_matrix<int>(testDim, j);
+            Matrix<int> testMatrix1 = generate_random_matrix_pad<int>(testDim, j);
+            Matrix<int> testMatrix2 = generate_random_matrix_pad<int>(testDim, j);
     
             auto start = std::chrono::high_resolution_clock::now();
             auto res = matrix_mult(testMatrix1, testMatrix2);

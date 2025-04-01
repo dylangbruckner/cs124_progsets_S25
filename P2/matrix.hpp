@@ -2,13 +2,11 @@
 #define MATRIX_HPP
 
 #include <vector>
-#include <cassert>
-#include <cmath>
 #include <iostream>
+#include <cmath>
 #include <random>
 
 size_t padding_calc(size_t dim);
-
 template <typename T>
 class Matrix {
     std::vector<T> data; // Data (only in root matrix)
@@ -28,11 +26,9 @@ public:
 
     // access element
     T& operator()(size_t row, size_t col) {
-        assert(row < dim && col < dim); 
         return view_ptr[row * step + col];
     }
     T operator()(size_t row, size_t col) const {
-        assert(row < dim && col < dim);
         return view_ptr[row * step + col];
     }
 
@@ -43,7 +39,6 @@ public:
 
     // submatrix creation
     Matrix<T> submatrix(size_t start_r, size_t start_c, size_t new_size) const {
-        assert(start_r < dim && start_c < dim);
         return Matrix<T>(view_ptr + start_r * step + start_c, new_size, step);
     }
 
@@ -58,32 +53,6 @@ public:
         return copied;
     }
 };
-
-// addition and subtraction by creating new matrix
-template<typename T>
-Matrix<T> matrix_add(const Matrix<T>& A, const Matrix<T>& B) { 
-    assert(A.getDim() == B.getDim());
-    size_t n = A.getDim();
-    Matrix<T> result(n);
-    for(size_t i = 0; i < n; ++i) {
-        for(size_t j = 0; j < n; ++j) {
-            result(i, j) = A(i, j) + B(i, j);
-        }
-    }
-    return result;
-}
-template<typename T>
-Matrix<T> matrix_sub(const Matrix<T>& A, const Matrix<T>& B) { 
-    assert(A.getDim() == B.getDim());
-    size_t n = A.getDim();
-    Matrix<T> result(n);
-    for(size_t i = 0; i < n; ++i) {
-        for(size_t j = 0; j < n; ++j) {
-            result(i, j) = A(i, j) - B(i, j);
-        }
-    }
-    return result;
-}
 
 // addition and subtraction straight into matrix target
 template<typename T>
@@ -111,7 +80,6 @@ void matrix_sub_inplace(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Targe
 // copy matrix A to target
 template<typename T>
 void matrix_inplace(const Matrix<T>& A, Matrix<T>& Target) {
-    assert(A.getDim() == Target.getDim());
     size_t n = A.getDim();
     for(size_t i = 0; i < n; ++i) {
         for(size_t j = 0; j < n; ++j) {
@@ -122,7 +90,6 @@ void matrix_inplace(const Matrix<T>& A, Matrix<T>& Target) {
 
 template<typename T> 
 Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
-    assert(A.getDim() == B.getDim());
     size_t n = A.getDim();
     Matrix<T> result(n);
 
@@ -145,7 +112,6 @@ Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
 
 template<typename T> 
 Matrix<T> matrix_mult_old(const Matrix<T>& A, const Matrix<T>& B) {
-    assert(A.getDim() == B.getDim());
     size_t n = A.getDim();
     Matrix<T> result(n);
 
@@ -251,5 +217,54 @@ Matrix<T> generate_random_matrix(size_t n, int randomization_type = 0) {
     return m;
 }
 
+template<typename T>
+Matrix<T> generate_random_matrix_pad(size_t n, int randomization_type = 0) {
+     // Create padded size
+    size_t padded_size = padding_calc(n);
+    Matrix<T> m(padded_size);
+   
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    switch (randomization_type) {
+        case 0: {
+            std::uniform_int_distribution<int> dis(0, 1);
+            for (size_t i = 0; i < padded_size; ++i) {
+                for (size_t j = 0; j < padded_size; ++j) {
+                    if (i >= n || j >= n)
+                        m(i, j) = 0;
+                    else
+                        m(i, j) = static_cast<T>(dis(gen));
+                }
+            }
+        }
+        case 1: {
+            std::uniform_int_distribution<int> dis(0, 2);
+            for (size_t i = 0; i < padded_size; ++i) {
+                for (size_t j = 0; j < padded_size; ++j) {
+                    if (i >= n || j >= n)
+                        m(i, j) = 0;
+                    else
+                        m(i, j) = static_cast<T>(dis(gen));
+                }
+            }
+        }
+        case 2: {
+            std::uniform_int_distribution<int> dis(-1, 1);
+            for (size_t i = 0; i < padded_size; ++i) {
+                for (size_t j = 0; j < padded_size; ++j) {
+                    if (i >= n || j >= n)
+                        m(i, j) = 0;
+                    else
+                        m(i, j) = static_cast<T>(dis(gen));
+                }
+            }
+        }
+    }
+
+
+
+    return m;
+}
 
 #endif // MATRIX_HPP
