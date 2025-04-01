@@ -9,11 +9,13 @@ Matrix<int> generate_random_graph(size_t dim, float probability) {
     std::uniform_real_distribution<> distrib(0.0, 1.0);
 
     for (size_t i = 0; i < dim; ++i) {
-        for (size_t j = 0; j < dim; ++j) {
+        for (size_t j = i+1; j < dim; ++j) {
             if (distrib(gen) <= probability){
                 M1(i, j) = 1;
+                M1(j, i) = 1;
             } else {
                 M1(i, j) = 0;
+                M1(j, i) = 0;
             }
         }
     }
