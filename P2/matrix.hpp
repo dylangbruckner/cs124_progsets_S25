@@ -7,6 +7,8 @@
 #include <iostream>
 #include <random>
 
+size_t padding_calc(size_t dim);
+
 template <typename T>
 class Matrix {
     std::vector<T> data; // Data (only in root matrix)
@@ -125,6 +127,29 @@ Matrix<T> matrix_mult(const Matrix<T>& A, const Matrix<T>& B) {
     Matrix<T> result(n);
 
     for(size_t i = 0; i < n; ++i) {
+        // Initialize result(i, j)
+        for(size_t j = 0; j < n; ++j) {
+            result(i, j) = T();
+        }
+
+        // Loop through w/ optimized caching
+        for(size_t k = 0; k < n; ++k) {
+            T Aik = A(i, k);
+            for(size_t j = 0; j < n; ++j) {
+                result(i, j) += Aik * B(k, j);
+            }
+        }
+    }
+    return result;
+}
+
+template<typename T> 
+Matrix<T> matrix_mult_old(const Matrix<T>& A, const Matrix<T>& B) {
+    assert(A.getDim() == B.getDim());
+    size_t n = A.getDim();
+    Matrix<T> result(n);
+
+    for(size_t i = 0; i < n; ++i) {
         for(size_t j = 0; j < n; ++j) {
             T sum = T(); // Initialize sum to 0 
             for(size_t k = 0; k < n; ++k) {
@@ -142,12 +167,17 @@ void matrix_mult_in_place(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& Tar
     size_t n = A.getDim();
 
     for(size_t i = 0; i < n; ++i) {
-        for(size_t j = 0; j < n; ++j) {
-            T sum = T(); // Initialize sum to 0 
-            for(size_t k = 0; k < n; ++k) {
-                sum += A(i, k) * B(k, j);
+        // Initialize values
+        for (size_t j = 0; j < n; ++j) {
+            Target(i, j) = T();
+        }
+
+        // Loop through w/ optimized caching
+        for(size_t k = 0; k < n; ++k) {
+            T Aik = A(i, k); // Cache A(i, k)
+            for(size_t j = 0; j < n; ++j) {
+                Target(i, j) += Aik * B(k, j);
             }
-            Target(i, j) = sum;
         }
     }
     return;
@@ -173,7 +203,10 @@ void print_matrix(const Matrix<T>& A, size_t dim) {
 // 2: -1, 0, or 1
 template<typename T>
 Matrix<T> generate_random_matrix(size_t n, int randomization_type = 0) {
-    Matrix<T> m(n);
+     // Create padded size
+    size_t padded_size = padding_calc(n);
+    Matrix<T> m(padded_size);
+   
     std::random_device rd;
     std::mt19937 gen(rd());
 
@@ -182,7 +215,10 @@ Matrix<T> generate_random_matrix(size_t n, int randomization_type = 0) {
             std::uniform_int_distribution<int> dis(0, 1);
             for (size_t i = 0; i < n; ++i) {
                 for (size_t j = 0; j < n; ++j) {
-                    m(i, j) = static_cast<T>(dis(gen));
+                    if (i >= n || j >= n)
+                        m(i, j) = 0;
+                    else
+                        m(i, j) = static_cast<T>(dis(gen));
                 }
             }
         }
@@ -190,7 +226,10 @@ Matrix<T> generate_random_matrix(size_t n, int randomization_type = 0) {
             std::uniform_int_distribution<int> dis(0, 2);
             for (size_t i = 0; i < n; ++i) {
                 for (size_t j = 0; j < n; ++j) {
-                    m(i, j) = static_cast<T>(dis(gen));
+                    if (i >= n || j >= n)
+                        m(i, j) = 0;
+                    else
+                        m(i, j) = static_cast<T>(dis(gen));
                 }
             }
         }
@@ -198,7 +237,10 @@ Matrix<T> generate_random_matrix(size_t n, int randomization_type = 0) {
             std::uniform_int_distribution<int> dis(-1, 1);
             for (size_t i = 0; i < n; ++i) {
                 for (size_t j = 0; j < n; ++j) {
-                    m(i, j) = static_cast<T>(dis(gen));
+                    if (i >= n || j >= n)
+                        m(i, j) = 0;
+                    else
+                        m(i, j) = static_cast<T>(dis(gen));
                 }
             }
         }

@@ -17,7 +17,7 @@ Matrix<int> strassen_mult_init(const Matrix<int>& M1, const Matrix<int>& M2) {
     Matrix<int> result(n), storage(n);
 
     // TODO TEMP FOR TESTING:
-    size_t cutoff = n - 1;
+    size_t cutoff = CUTOFF;
 
     strassen_mult_recursion(M1, M2, result, storage, cutoff);
     return result;

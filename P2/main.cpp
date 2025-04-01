@@ -91,6 +91,8 @@ int main(int argc, char** argv) {
         }
         Matrix<int> C = strassen_mult_init(A, B);
         print_matrix(C, MATRIX_SIZE);
+        Matrix<int> D = matrix_mult(A, B);
+        print_matrix(D, MATRIX_SIZE);
      
     } else if (custom == 2) { // Testing experimental crossover
         experiments();
