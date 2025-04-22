@@ -2,7 +2,7 @@
 #include <vector>
 #include <random>
 
-std::vector<int> repeatedRandom(const std::vector<int>& input, const size_t& max_iter) {
+std::vector<int> repeatedRandom(const std::vector<size_t>& input, const size_t& max_iter) {
     size_t n = input.size();
 
     std::vector<int> S = generateRandom(n);
@@ -33,7 +33,7 @@ std::vector<int> generateRandom(const size_t& n) {
     return output;
 }
 
-int calculateResidue(const std::vector<int>& original, const std::vector<int>& S, const size_t& n) {
+int calculateResidue(const std::vector<size_t>& original, const std::vector<int>& S, const size_t& n) {
     int residue = 0;
 
     for (size_t i = 0; i < n; ++i) {
