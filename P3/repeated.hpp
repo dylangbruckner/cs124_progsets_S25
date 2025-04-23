@@ -19,7 +19,7 @@ std::vector<size_t> generate_random_prepartition(const size_t n);
 //  runs the repeated_random algorithm for max_iter times on input nums
 //  prepartitioned is true if the solution should use a prepartitioned solution
 //  returns the residue
-size_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, const bool prepartitioned);
+std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, const bool prepartitioned);
 
 // calculateResidue
 //  calculates the residue of numbers original with assignment S
