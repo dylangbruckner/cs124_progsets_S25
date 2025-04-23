@@ -8,12 +8,12 @@ std::vector<int> repeatedRandom(const std::vector<std::int64_t>& input, const si
     for (size_t i = 0; i < max_iter; ++i) {
         std::vector<int> temp = generateRandom(n);
         
-        if (calculateResidue(input, temp) < calculateResidue(input, S)) {
+        if (calculate_residue_unsigned(input, temp) < calculate_residue_unsigned(input, S)) {
             S = temp;
         }
     }
 
-    // TODO: return residue?
+    // TODO: return residue? yes
     return S;
 }
 
@@ -32,7 +32,21 @@ std::vector<int> generateRandom(const size_t n) {
     return output;
 }
 
-std::uint64_t calculateResidue(const std::vector<std::int64_t>& original, const std::vector<int>& S) {
+std::vector<size_t> generate_random_prepartition(const size_t n) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<size_t> dist(1, n); 
+
+    std::vector<size_t> output(n);
+
+    for (size_t i = 0; i < n; ++i) {
+        output[i] = dist(gen);
+    }
+
+    return output;
+}
+
+std::int64_t calculate_residue_signed(const std::vector<std::int64_t>& original, const std::vector<int>& S) {
     std::int64_t residue = 0;
     size_t n = original.size();
 
@@ -40,8 +54,16 @@ std::uint64_t calculateResidue(const std::vector<std::int64_t>& original, const 
         residue += original[i] * S[i];
     }
     
-    if (residue == std::numeric_limits<std::int64_t>::min()) {
+    return residue;
+}
+
+std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& original, const std::vector<int>& S) {
+    return abs_value_64(calculate_residue_signed(original, S));
+}
+
+inline std::uint64_t abs_value_64(const std::int64_t num) {
+    if (num == std::numeric_limits<std::int64_t>::min()) {
         return static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()) + 1;
     }
-    return static_cast<std::uint64_t>(std::abs(residue));
+    return static_cast<std::uint64_t>(std::abs(num));
 }

@@ -21,8 +21,13 @@ std::vector<size_t> generate_random_prepartition(const size_t n);
 //  returns the residue
 std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, const bool prepartitioned);
 
-// calculateResidue
+// caclulate_residue (signed and unsigned version)
 //  calculates the residue of numbers original with assignment S
-std::uint64_t calculateResidue(const std::vector<std::int64_t>& original, const std::vector<int>& S);
+std::int64_t calculate_residue_signed(const std::vector<std::int64_t>& original, const std::vector<int>& S);
+std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& original, const std::vector<int>& S);
+
+// abs_value_64
+//  returns the absolute value of a signed 64 bit integer as unsigned. 
+inline std::uint64_t abs_value_64(const std::int64_t num);
 
 #endif // REPEATED_HPP
