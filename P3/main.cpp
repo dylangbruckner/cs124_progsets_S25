@@ -39,8 +39,8 @@ int main(int argc, char** argv) {
         }
 
         // get input numbers
-        std::vector<int> input;
-        int num;
+        std::vector<std::int64_t> input;
+        std::int64_t num;
 
         while (file >> num) {
             input.push_back(num);

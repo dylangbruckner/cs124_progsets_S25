@@ -1,5 +1,6 @@
 #include "repeated.hpp"
 
+// todo make sure the input types are std::int64_t for the input vectors (not the solutions or random things though)
 std::vector<int> repeatedRandom(const std::vector<int>& input, const size_t max_iter) {
     size_t n = input.size();
 
