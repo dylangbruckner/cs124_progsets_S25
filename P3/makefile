@@ -1,8 +1,8 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17 -O3
 
-TARGET = strassen
-SRCS = main.cpp experiments.cpp repeated.cpp
+TARGET = partition
+SRCS = main.cpp repeated.cpp karmakar.cpp experiments.cpp hill.cpp annealing.cpp
 
 all: $(TARGET)
 

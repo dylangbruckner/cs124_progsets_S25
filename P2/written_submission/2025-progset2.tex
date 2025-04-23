@@ -1,0 +1,225 @@
+\documentclass[11pt]{article}
+% \pagestyle{empty}
+
+\setlength{\oddsidemargin}{-0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.9 in}
+\setlength{\textwidth}{7.0 in}
+\setlength{\textheight}{9.0 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0.3 in}
+\setlength{\parskip}{0.1 in}
+\usepackage{epsf}
+
+\def\O{\mathop{\smash{O}}\nolimits}
+\def\o{\mathop{\smash{o}}\nolimits}
+\newcommand{\e}{{\rm e}}
+\newcommand{\R}{{\bf R}}
+\newcommand{\Z}{{\bf Z}}
+
+\begin{document}
+	
+	\section*{CS 1240 Programming Assignment 2: Spring 2025}
+ 		
+	\textbf{Your name(s) (up to two):} 
+		
+	\textbf{Collaborators:} (You shouldn't have any collaborators but the up-to-two of you, but tell us if you did.)
+
+	\textbf{No. of late days used on previous psets: }\\ \indent
+	\textbf{No. of late days used after including this pset: }
+
+Homework is due Wednesday 2025-04-02 at 11:59pm ET. You are allowed up to {\bf twelve} late days through the semester, but the number of late days you take on each assignment must be a nonnegative integer at most {\bf two}. 
+
+\noindent {\bf {\Large Overview}:} 
+
+(Much of this progset will make a lot more sense after lecture on Monday, March 3. But here's the progset in advance anyway. If you are familiar with matrix multiplication you can start coding up standard matrix multiplication now. If you are not, now is a great time to brush up before lecture on Monday!!)
+
+Strassen's divide and conquer matrix multiplication algorithm for $n$
+by $n$ matrices is asymptotically faster than the conventional
+$\O(n^3)$ algorithm.  This means that for sufficiently large values of
+$n$, Strassen's algorithm will run faster than the conventional
+algorithm.  For small values of $n$, however, the conventional
+algorithm may be faster.  Indeed, the textbook Algorithms in C (1990
+edition) suggests that $n$ would have to be in the thousands before
+offering an improvement to standard multiplication, and ``Thus the
+algorithm is a theoretical, not practical, contribution.''  Here we
+test this armchair analysis.
+
+Here is a key point, though (for any recursive algorithm!).  Since
+Strassen's algorithm is a recursive algorithm, at some point in the
+recursion, once the matrices are small enough, we may want to switch
+from recursively calling Strassen's algorithm and just do a
+conventional matrix multiplication.  That is, the proper way to do
+Strassen's algorithm is to not recurse all the way down to a ``base
+case'' of a 1 by 1 matrix, but to switch earlier and use conventional
+matrix multiplication.  That is, there's no reason to do a ``base
+case'' of a 1 by 1 matrix; it might be faster to use a larger-sized
+base case, as conventional matrix multiplication might be faster up to
+some reasonable size.  Let us define the {\em cross-over point}
+between the two algorithms to be the value of $n$ for which we want to
+stop using Strassen's algorithm and switch to conventional matrix
+multiplication.  The goal of this assignment is to implement the
+conventional algorithm and Strassen's algorithm and to determine their
+cross-over point, both analytically and experimentally.  One important
+factor our simple analysis will not take into account is memory
+management, which may significantly affect the speed of your
+implementation.
+
+\noindent {\bf {\Large Tasks:}}
+
+\begin{enumerate}
+
+\item Assume that the cost of any single arithmetic operation (adding,
+subtracting, multiplying, or dividing two real numbers) is 1, and that
+all other operations are free.  Consider the following variant of
+Strassen's algorithm: to multiply two $n$ by $n$ matrices, start using
+Strassen's algorithm, but stop the recursion at some size $n_0$, and
+use the conventional algorithm below that point.  You have to find a
+suitable value for $n_0$ -- the cross-over point.  Analytically
+determine the value of $n_0$ that optimizes the running time of this
+algorithm in this model.  (That is, solve the appropriate equations, somehow,
+numerically.)
+This gives a crude estimate for the cross-over point between
+Strassen's algorithm and the standard matrix multiplication algorithm.
+
+\medskip Note: there are multiple ways to handle matrices of odd dimension, which may give different values of $n_0$. Any of them will be valid as long as the approach is properly specified, but the one that we expect most students to come up with involves padding with 0's (refer to the hint at the bottom of the document).
+\item Implement your variant of Strassen's algorithm and the standard
+matrix multiplication algorithm to find the cross-over point
+experimentally.  Experimentally optimize for $n_0$ and compare the
+experimental results with your estimate from above.  Make both
+implementations as efficient as possible.  The actual cross-over
+point, which you would like to make as small as possible, will depend
+on how efficiently you implement Strassen's algorithm.  Your implementation
+should work for any size matrices, not just those whose dimensions are a power
+of 2.
+
+To test your algorithm, you might try matrices where each entry is
+randomly selected to be 0 or 1; similarly, you might try matrices
+where each entry is randomly selected to be 0, 1 or 2, or instead 0,
+1, or $-1$.  We will test on integer matrices, possibly of this form.
+(You may assume integer inputs.)  You need not try all of these, but
+do test your algorithm adequately.
+
+\item Triangle in random graphs:  Recall that you can represent the
+adjacency matrix of a graph by a matrix $A$.  Consider an undirected
+graph.  It turns out that $A^3$ can be used to determine the number
+of triangles in a graph: the $(ij)$th entry
+in the matrix $A^2$ counts the paths from $i$ to $j$ of lenth two,
+and the $(ij)$th entry in the matrix $A^3$ counts the path from $i$ to
+$j$ of length 3.  To count the number of triangles in in graph, we can
+simply add the entries in the diagonal, and divide by 6.  This is because
+the $j$th diagonal entry counts the number of paths of length 3 from $j$
+to $j$.  Each such path is a triangle, and each triangle is counted 6 times
+(for each of the vertices in the triangle, it is counted once in each direction).  
+
+Create a random graph on $1024$ vertices where each edge is included with probability $p$ for each of the following values of $p$:  $p = 0.01, 0.02, 0.03, 0.04,$ and $0.05$.  Use your (Strassen's) matrix multiplication code to count the number of triangles in each of these graphs, and compare it to the expected number of triangles, which is ${1024 \choose 3} p^3$.  Create a chart showing your results compared to the expectation.  
+
+\end{enumerate}
+
+\noindent {\bf {\Large Code setup:}} 
+
+60\% of the score for problem set 2 is determined by an autograder. You can submit code to the autograder on Gradescope repeatedly; only your latest submission will determine your final grade. We support the following programming languages: Python3, C++, C, Java, Go; if you want to use another language, please contact us about it. 
+
+ {\bf {\Large Option 1: Single-source file:}} 
+
+In this option, you can submit a single source file. Please make sure to NOT submit a makefile/Makefile if you elect to use this option, as it confuses the autograder. Please ensure that you have exactly one of the following files in your directory if you choose to use this option: 
+\begin{enumerate}
+\item strassen.py - for python. In this case, we will run
+
+python3 strassen.py $<$args$>$
+\item strassen.c - for C. In this case, we will run 
+
+gcc -std=c11 -O2 -Wall -Wextra strassen.c -o strassen -lm -lpthread
+
+./strassen $<$args$>$
+\item strassen.cpp - for C++. In this case, we will run 
+
+g++ -std=c++17 -O2 -Wall -Wextra strassen.cpp -o strassen -lm -lpthread
+
+./strassen $<$args$>$
+
+\item strassen.java / Strassen.java - for Java. In this case, we will run 
+
+javac strassen.java (javac Strassen.java)
+
+java -ea strassen $<$args$>$ (java -ea Strassen $<$args$>$) 
+\item strassen.go - for Go. In this case, we will run 
+
+go build strassen.go
+
+go run strassen.go $<$args$>$
+\end{enumerate}
+ {\bf {\Large Option 2: Makefile:}} 
+
+In this option, you submit a makefile (either Makefile or makefile). In this case, the autograder first runs make. Then, it identifies the language and runs the corresponding command above.
+
+Your code should take three arguments: a flag, a dimension, and an input file:
+
+\noindent \$ ./strassen 0 dimension inputfile 
+
+The flag 0 is meant to provide you some flexibility; you may use other
+values for your own testing, debugging, or extensions.  The dimension,
+which we refer to henceforth as $d$, is the dimension of the matrix
+you are multiplying, so that 32 means you are multiplying two 32 by 32
+matrices together.  The inputfile is an ASCII file with $2d^2$ integer
+numbers, one per line, representing two matrices $A$ and $B$; you are
+to find the product $AB = C$.  The first integer number is matrix entry
+$a_{0,0}$, followed by $a_{0,1},a_{0,2},\ldots,a_{0,d-1}$; next comes
+$a_{1,0},a_{1,1}$, and so on, for the first $d^2$ numbers.  The next
+$d^2$ numbers are similar for matrix $B$.
+
+Your program should put on standard output (in C: printf, cout, System.out,
+etc.) a list of the values of the {\em diagonal entries}
+$c_{0,0},c_{1,1},\ldots,c_{d-1,d-1}$, one per line, including a
+trailing newline.  The output will be checked by a script -- add no
+clutter.  (You should not output the whole matrix, although of course
+all entries should be computed.)
+
+The inputs we present will be small integers, but you should make sure
+your matrix multiplication can deal with results that are up to 32 bits.
+
+Do not turn in an executable.
+
+\noindent {\bf {\Large What to hand in:}} 
+
+As before, you may work in pairs, or by yourself.  Hand in a project
+report (on paper) describing your analytical and experimental work
+(for example, carefully describe optimizations you made in your
+implementations).  Be sure to discuss the results you obtain, and try
+to give explanations for what you observe.  How low was your
+cross-over point?  What difficulties arose?  What types of matrices did you
+multiply, and does this choice matter?
+
+Your grade will be based primarily on the correctness of your program,
+the crossover point you find, your interpretation of the
+data, and your discussion of the experiment.
+
+\noindent {\bf {\Large Hints:}} 
+
+It is hard to make the conventional algorithm inefficient; however,
+you may get better caching performance by looping through the
+variables in the right order (really, try it!).  For Strassen's algorithm:
+\begin{itemize}
+\item Avoid excessive memory allocation and deallocation.  This requires
+some thinking.
+\item Avoid copying large blocks of data unnecessarily.   This requires
+some thinking.
+\item Your implementation of Strassen's algorithm should
+work even when $n$ is odd!  This requires some additional work, and thinking.
+(One option is to pad with 0's;  how can this be done most effectively?)
+However, you may want to first get it to work when $n$ is a power of 2 --
+this will get you most of the credit -- and then refine it to work for
+more general values of $n$.  
+\end{itemize}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
