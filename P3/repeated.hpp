@@ -23,6 +23,6 @@ size_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, 
 
 // calculateResidue
 //  calculates the residue of numbers original with assignment S
-int calculateResidue(const std::vector<std::int64_t>& original, const std::vector<int>& S);
+std::uint64_t calculateResidue(const std::vector<std::int64_t>& original, const std::vector<int>& S);
 
 #endif // REPEATED_HPP

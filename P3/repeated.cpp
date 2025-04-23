@@ -1,7 +1,6 @@
 #include "repeated.hpp"
 
-// todo make sure the input types are std::int64_t for the input vectors (not the solutions or random things though)
-std::vector<int> repeatedRandom(const std::vector<int>& input, const size_t max_iter) {
+std::vector<int> repeatedRandom(const std::vector<std::int64_t>& input, const size_t max_iter) {
     size_t n = input.size();
 
     std::vector<int> S = generateRandom(n);
@@ -32,13 +31,16 @@ std::vector<int> generateRandom(const size_t n) {
     return output;
 }
 
-int calculateResidue(const std::vector<int>& original, const std::vector<int>& S) {
-    int residue = 0;
+std::uint64_t calculateResidue(const std::vector<std::int64_t>& original, const std::vector<int>& S) {
+    std::int64_t residue = 0;
     size_t n = original.size();
 
     for (size_t i = 0; i < n; ++i) {
         residue += original[i] * S[i];
     }
-
-    return residue;
+    
+    if (residue == std::numeric_limits<std::int64_t>::min()) {
+        return static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()) + 1;
+    }
+    return static_cast<std::uint64_t>(std::abs(residue));
 }

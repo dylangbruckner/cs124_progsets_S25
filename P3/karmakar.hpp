@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <cstdint>
+#include <cstdlib>
+#include <limits>
 
 // karmarkar_karp
 //  runs the karmarkar_karp algorithm on input nums
