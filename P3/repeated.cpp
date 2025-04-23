@@ -13,6 +13,7 @@ std::vector<int> repeatedRandom(const std::vector<std::int64_t>& input, const si
         }
     }
 
+    // TODO: return residue?
     return S;
 }
 
