@@ -32,7 +32,7 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
             old = P[j];
             do {
                 k = dist(gen);
-            } while (old != k);
+            } while (old == k);
 
             // get new residue
             P[j] = k;
