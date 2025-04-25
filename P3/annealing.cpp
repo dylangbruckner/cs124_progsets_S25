@@ -72,17 +72,17 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
 
         std::int64_t best_residue = residue;
         std::int64_t temp_residue;
+        std::uint64_t abs_residue = abs_value_64(residue);
         float flip;
 
         
 
         // iterate through generating a random move each time
         for (size_t i = 0; i < max_iter; ++i) {
-            temp_residue = residue;
             j = dist(gen);
 
             // flip j's group, adding/subing j twice, once to remove from old group and once to add to new group
-            temp_residue += input[j] * S[j] * 2;
+            temp_residue = residue - input[j] * S[j] * 2;
 
             // with 1/2 probability flip another index
             flip = real(gen);
@@ -94,12 +94,11 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
                 } while (k == j);
 
                 // flip k 
-                temp_residue += input[k] * S[k] * 2;
+                temp_residue -= input[k] * S[k] * 2;
             }
 
             // new residue is smaller or random condition is met
-            if ((temp_residue < residue && residue > 0) 
-             || (temp_residue > residue && residue > 0)
+            if ((abs_value_64(temp_residue) < abs_residue)
              || (real(gen) < exp((abs_value_64(residue)-abs_value_64(temp_residue))/T(i)))) {
                 
                 // is 0, it is minimized and thus return early
@@ -111,6 +110,7 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
                 S[j] = -S[j];
                 if (flip > 0.5) S[k] = -S[k];
                 residue = temp_residue;
+                abs_residue = abs_value_64(temp_residue);
 
                 // update best_residue if necessary
                 if (residue < best_residue) best_residue = residue;

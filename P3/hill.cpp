@@ -60,21 +60,22 @@ std::uint64_t hill_climbing(const std::vector<std::int64_t>& input, const size_t
         std::vector<int> S = generateRandom(n);
         // keep residue insigned for simplification of calculations
         std::int64_t residue = calculate_residue_signed(input, S);
-        std::int64_t temp_residue;
-        float flip;
 
         // return 0 if our residue is already minimized
         if (!residue) {
             return 0;        
         }
 
+        std::int64_t temp_residue;
+        std::uint64_t abs_residue = abs_value_64(residue);
+        float flip;
+
         // iterate through generating a random move each time
         for (size_t i = 0; i < max_iter; ++i) {
-            temp_residue = residue;
             j = dist(gen);
 
             // flip j's group, adding/subing j twice, once to remove from old group and once to add to new group
-            temp_residue += input[j] * S[j] * 2;
+            temp_residue = residue - input[j] * S[j] * 2;
 
             // with 1/2 probability flip another index
             flip = real(gen);
@@ -86,12 +87,11 @@ std::uint64_t hill_climbing(const std::vector<std::int64_t>& input, const size_t
                 } while (k == j);
 
                 // flip k 
-                temp_residue += input[k] * S[k] * 2;
+                temp_residue -= input[k] * S[k] * 2;
             }
 
             // new residue is smaller
-            if ((temp_residue < residue && residue > 0) 
-             || (temp_residue > residue && residue > 0)) {
+            if (abs_value_64(temp_residue) < abs_residue) {
                 
                 // is 0, it is minimized and thus return early
                 if (!temp_residue) {
@@ -102,6 +102,7 @@ std::uint64_t hill_climbing(const std::vector<std::int64_t>& input, const size_t
                 S[j] = -S[j];
                 if (flip > 0.5) S[k] = -S[k];
                 residue = temp_residue;
+                abs_residue = abs_value_64(temp_residue);
             }
         }
 
