@@ -6,16 +6,14 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
     // random generators for moves 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> real(0.0, 1.0);
     std::uniform_int_distribution<size_t> dist(1, n);
+    std::uniform_real_distribution<float> real(0.0, 1.0);
     
     if (prepartitioned) {
-        // todo but i'm lazy
-    } else {
-        
+
         // generate random solution
-        std::vector<int> S = generateRandom(n);
-        std::uint64_t residue = calculate_residue_unsigned(input, S);
+        std::vector<size_t> P = generate_random_prepartition(n);
+        std::uint64_t residue = calculate_residue_partition(input, P);
 
         // return 0 if our residue is already minimized
         if (!residue) {
@@ -24,6 +22,54 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
 
         std::uint64_t best_residue = residue;
         std::uint64_t temp_residue;
+        size_t j;
+        size_t k;
+        size_t old; // stores the value of the neighbor that we switches
+
+        // iterate through generating a random move each time
+        for (size_t i = 0; i < max_iter; ++i) {
+            j = dist(gen);
+            old = P[j];
+            do {
+                k = dist(gen);
+            } while (old != k);
+
+            // get new residue
+            P[j] = k;
+            temp_residue = calculate_residue_partition(input, P);
+
+            // new residue is smaller or random condition is met
+            if ((temp_residue < residue) 
+             || (real(gen) < exp(temp_residue-residue)/T(i))) {
+                
+                // is 0, it is minimized and thus return early
+                if (!temp_residue) {
+                    return 0;
+                }
+                
+                // adjust new optimal solution
+                residue = temp_residue;
+
+                // update best_residue if necessary
+                if (residue < best_residue) best_residue = residue;
+            
+            } else P[j] = old; // otherwise reset value of P
+        }
+
+        return best_residue;
+    } else {
+        
+        // generate random solution
+        std::vector<int> S = generateRandom(n);
+        std::int64_t residue = calculate_residue_signed(input, S);
+
+        // return 0 if our residue is already minimized
+        if (!residue) {
+            return 0;        
+        }
+
+        std::int64_t best_residue = residue;
+        std::int64_t temp_residue;
         size_t j;
         size_t k;
         float flip;
