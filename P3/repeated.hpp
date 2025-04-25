@@ -4,6 +4,16 @@
 #include <random>
 #include "karmakar.hpp"
 
+
+// abs_value_64
+//  returns the absolute value of a signed 64 bit integer as unsigned. 
+inline std::uint64_t abs_value_64(const std::int64_t num) {
+    if (num == std::numeric_limits<std::int64_t>::min()) {
+        return static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()) + 1;
+    }
+    return static_cast<std::uint64_t>(std::abs(num));
+}
+
 // generateRandom
 //  generates a random conventional solution of size 'n' in the form specified by the progset documentation
 //  returns a vector containing of elements -1 or 1 pertaining to the two groups
@@ -29,9 +39,5 @@ std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& origin
 //  calcultes the residue based on a prepartition (unsigned) per the description in the progset
 std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<std::uint64_t>& P);
 
-
-// abs_value_64
-//  returns the absolute value of a signed 64 bit integer as unsigned. 
-inline std::uint64_t abs_value_64(const std::int64_t num);
 
 #endif // REPEATED_HPP

@@ -2,9 +2,10 @@
 
 std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, const bool prepartitioned) {
     // todo do this case
-    if (prepartitioned) {
+    // todo add a check for if the residue is ever 0, if so return instantly
+    // if (prepartitioned) {
 
-    } else {
+    // } else {
         size_t n = input.size();
 
         std::vector<int> S = generateRandom(n);
@@ -18,7 +19,7 @@ std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max
         }
 
         return calculate_residue_unsigned(input, S);
-    }
+    // }
 }
 
 std::vector<int> generateRandom(const size_t n) {
@@ -74,11 +75,4 @@ std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& origi
     }
 
     return karmarkar_karp(A_prime);
-}
-
-inline std::uint64_t abs_value_64(const std::int64_t num) {
-    if (num == std::numeric_limits<std::int64_t>::min()) {
-        return static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()) + 1;
-    }
-    return static_cast<std::uint64_t>(std::abs(num));
 }

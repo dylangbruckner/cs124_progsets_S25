@@ -1,7 +1,6 @@
-#include <vector>
-#include <iostream>
-#include <random>
-#include "repeated.cpp"
+#include "experiments.hpp"
+
+// todo fill out the hpp file for this 
 
 std::vector<size_t> problemInstance(const size_t& n) {
     std::random_device rd;
@@ -27,7 +26,7 @@ std::vector<size_t> problemInstance(const size_t& n) {
     return output;
 }
 
-std::vector<size_t> experiments(const size_t& n, const int& num_trials, const size_t& max_iter) {
+std::vector<size_t> experiments(const size_t n, const size_t num_trials, const size_t max_iter) {
     std::vector<std::vector<size_t>> output(num_trials, std::vector<size_t>(4, 0));
 
     for (size_t i = 0; i < num_trials; ++i) {
@@ -43,5 +42,7 @@ std::vector<size_t> experiments(const size_t& n, const int& num_trials, const si
     }
     // Output it all 
 
-
+    // this is temporary
+    std::vector<size_t> empty(0);
+    return empty;
 }

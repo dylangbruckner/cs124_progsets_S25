@@ -9,13 +9,15 @@ std::uint64_t hill_climbing(const std::vector<std::int64_t>& input, const size_t
     std::uniform_real_distribution<float> real(0.0, 1.0);
     std::uniform_int_distribution<size_t> dist(1, n);
     
+    // early decleratoins
+    size_t j;
+    size_t k = 0;
+    
     if (prepartitioned) {
         // generate random solution
         std::vector<size_t> P = generate_random_prepartition(n);
         std::uint64_t residue = calculate_residue_partition(input, P);
         std::uint64_t temp_residue;
-        size_t j;
-        size_t k;
         size_t old;
 
         // return 0 if our residue is already minimized
@@ -59,8 +61,6 @@ std::uint64_t hill_climbing(const std::vector<std::int64_t>& input, const size_t
         // keep residue insigned for simplification of calculations
         std::int64_t residue = calculate_residue_signed(input, S);
         std::int64_t temp_residue;
-        size_t j;
-        size_t k;
         float flip;
 
         // return 0 if our residue is already minimized

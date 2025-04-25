@@ -8,6 +8,10 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
     std::mt19937 gen(rd());
     std::uniform_int_distribution<size_t> dist(1, n);
     std::uniform_real_distribution<float> real(0.0, 1.0);
+
+    // early declerations
+    size_t j;
+    size_t k = 0;
     
     if (prepartitioned) {
 
@@ -22,8 +26,6 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
 
         std::uint64_t best_residue = residue;
         std::uint64_t temp_residue;
-        size_t j;
-        size_t k;
         size_t old; // stores the value of the neighbor that we switches
 
         // iterate through generating a random move each time
@@ -70,8 +72,6 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
 
         std::int64_t best_residue = residue;
         std::int64_t temp_residue;
-        size_t j;
-        size_t k;
         float flip;
 
         

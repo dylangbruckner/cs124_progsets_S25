@@ -48,23 +48,22 @@ int main(int argc, char** argv) {
 
         switch (algo) {
             case 0:
-                std::cout << karmarkar_karp(input); 
+                std::cout << karmarkar_karp(input) << std::endl; 
             case 1:
-                std::cout << repeated_random(input, MAX_ITER, false);
+                std::cout << repeated_random(input, MAX_ITER, false) << std::endl;
             case 2:
-                std::cout << hill_climbing(input, MAX_ITER, false);
+                std::cout << hill_climbing(input, MAX_ITER, false) << std::endl;
             case 3:
-                std::cout << simulated_annealing(input, MAX_ITER, false);
+                std::cout << simulated_annealing(input, MAX_ITER, false) << std::endl;
             case 11:
-                std::cout << repeated_random(input, MAX_ITER, true);
+                std::cout << repeated_random(input, MAX_ITER, true) << std::endl;
             case 12:
-                std::cout << hill_climbing(input, MAX_ITER, true);
+                std::cout << hill_climbing(input, MAX_ITER, true) << std::endl;
             case 13:
-                std::cout << simulated_annealing(input, MAX_ITER, true);
+                std::cout << simulated_annealing(input, MAX_ITER, true) << std::endl;
             default:
                 std::cerr << "Error: Algorithm type not recognized";
                 return 1;
-            std::cout << std::endl;
             return 0;
         }
     } else if (flag == 1) { // experiments
