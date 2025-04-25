@@ -70,9 +70,9 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
             return 0;        
         }
 
-        std::int64_t best_residue = residue;
         std::int64_t temp_residue;
         std::uint64_t abs_residue = abs_value_64(residue);
+        std::uint64_t best_residue = abs_residue;
         float flip;
 
         
@@ -113,12 +113,12 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
                 abs_residue = abs_value_64(temp_residue);
 
                 // update best_residue if necessary
-                if (residue < best_residue) best_residue = residue;
+                if (abs_residue < best_residue) best_residue = abs_residue;
 
             }
         }
 
-        return abs_value_64(best_residue);
+        return best_residue;
     }
 }
 
