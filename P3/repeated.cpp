@@ -1,20 +1,24 @@
 #include "repeated.hpp"
 
-std::vector<int> repeatedRandom(const std::vector<std::int64_t>& input, const size_t max_iter) {
-    size_t n = input.size();
+std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, const bool prepartitioned) {
+    // todo do this case
+    if (prepartitioned) {
 
-    std::vector<int> S = generateRandom(n);
+    } else {
+        size_t n = input.size();
 
-    for (size_t i = 0; i < max_iter; ++i) {
-        std::vector<int> temp = generateRandom(n);
-        
-        if (calculate_residue_unsigned(input, temp) < calculate_residue_unsigned(input, S)) {
-            S = temp;
+        std::vector<int> S = generateRandom(n);
+
+        for (size_t i = 0; i < max_iter; ++i) {
+            std::vector<int> temp = generateRandom(n);
+            
+            if (calculate_residue_unsigned(input, temp) < calculate_residue_unsigned(input, S)) {
+                S = temp;
+            }
         }
+        
+        return calculate_residue_unsigned(input, S);
     }
-
-    // TODO: return residue? yes
-    return S;
 }
 
 std::vector<int> generateRandom(const size_t n) {

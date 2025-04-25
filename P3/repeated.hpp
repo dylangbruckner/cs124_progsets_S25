@@ -14,7 +14,6 @@ std::vector<int> generateRandom(const size_t n);
 //   returns this vector
 std::vector<size_t> generate_random_prepartition(const size_t n);
 
-// todo make this function match the one in .cpp
 // repeated_random
 //  runs the repeated_random algorithm for max_iter times on input nums
 //  prepartitioned is true if the solution should use a prepartitioned solution
@@ -25,6 +24,11 @@ std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max
 //  calculates the residue of numbers original with assignment S
 std::int64_t calculate_residue_signed(const std::vector<std::int64_t>& original, const std::vector<int>& S);
 std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& original, const std::vector<int>& S);
+
+// calculate_residue_prepatition
+//  calcultes the residue based on a prepartition
+std::int64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<std::uint64_t>& P);
+
 
 // abs_value_64
 //  returns the absolute value of a signed 64 bit integer as unsigned. 
