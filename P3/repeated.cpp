@@ -16,7 +16,7 @@ std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max
                 S = temp;
             }
         }
-        
+
         return calculate_residue_unsigned(input, S);
     }
 }
@@ -63,6 +63,17 @@ std::int64_t calculate_residue_signed(const std::vector<std::int64_t>& original,
 
 std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& original, const std::vector<int>& S) {
     return abs_value_64(calculate_residue_signed(original, S));
+}
+
+std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<std::uint64_t>& P) {
+    size_t n = original.size();
+    std::vector<std::int64_t> A_prime(n);
+
+    for (size_t j = 0; j < n; ++j) {
+        A_prime[P[j]] = A_prime[P[j]] + original[j];
+    }
+
+    return karmarkar_karp(A_prime);
 }
 
 inline std::uint64_t abs_value_64(const std::int64_t num) {

@@ -12,6 +12,6 @@
 // karmarkar_karp
 //  runs the karmarkar_karp algorithm on input nums
 //  returns the residue
-std::uint64_t karmarkar_karp(const std::vector<std::int64_t>& nums);
+std::uint64_t karmarkar_karp(std::vector<std::int64_t>& problem);
 
 #endif // KARMAKAR_HPP

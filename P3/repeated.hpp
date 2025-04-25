@@ -26,8 +26,8 @@ std::int64_t calculate_residue_signed(const std::vector<std::int64_t>& original,
 std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& original, const std::vector<int>& S);
 
 // calculate_residue_prepatition
-//  calcultes the residue based on a prepartition
-std::int64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<std::uint64_t>& P);
+//  calcultes the residue based on a prepartition (unsigned) per the description in the progset
+std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<std::uint64_t>& P);
 
 
 // abs_value_64
