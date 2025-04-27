@@ -37,7 +37,7 @@ std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& origin
 
 // calculate_residue_prepatition
 //  calcultes the residue based on a prepartition (unsigned) per the description in the progset
-std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<std::uint64_t>& P);
+std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<size_t>& P);
 
 
 #endif // REPEATED_HPP

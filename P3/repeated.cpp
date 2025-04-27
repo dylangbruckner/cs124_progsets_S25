@@ -1,17 +1,25 @@
 #include "repeated.hpp"
 
 std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, const bool prepartitioned) {
-    // todo do this case
-    // todo add a check for if the residue is ever 0, if so return instantly
-    // if (prepartitioned) {
-
-    // } else {
-        size_t n = input.size();
-
-        std::vector<int> S = generateRandom(n);
+    size_t n = input.size();
+    if (prepartitioned) {
+        std::vector<size_t> S = generate_random_prepartition(n);
+        std::vector<size_t> temp;
 
         for (size_t i = 0; i < max_iter; ++i) {
-            std::vector<int> temp = generateRandom(n);
+            temp = generate_random_prepartition(n);
+
+            if (calculate_residue_partition(input, temp) < calculate_residue_partition(input, S)) {
+                S = temp;
+            }
+        }
+
+    } else {
+        std::vector<int> S = generateRandom(n);
+        std::vector<int> temp;
+
+        for (size_t i = 0; i < max_iter; ++i) {
+            temp = generateRandom(n);
             
             if (calculate_residue_unsigned(input, temp) < calculate_residue_unsigned(input, S)) {
                 S = temp;
@@ -19,7 +27,7 @@ std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max
         }
 
         return calculate_residue_unsigned(input, S);
-    // }
+    }
 }
 
 std::vector<int> generateRandom(const size_t n) {
@@ -66,7 +74,7 @@ std::uint64_t calculate_residue_unsigned(const std::vector<std::int64_t>& origin
     return abs_value_64(calculate_residue_signed(original, S));
 }
 
-std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<std::uint64_t>& P) {
+std::uint64_t calculate_residue_partition(const std::vector<std::int64_t>& original, const std::vector<size_t>& P) {
     size_t n = original.size();
     std::vector<std::int64_t> A_prime(n);
 

@@ -21,11 +21,7 @@ std::uint64_t karmarkar_karp(vector<std::int64_t>& problem) {
         elt_2 = maxHeap.top();
         maxHeap.pop();
 
-        // todo shouldn't elt_1 always be larger (or equal) if it's at the top o the heap?
-        if (elt_1 > elt_2) 
-            diff = elt_1 - elt_2;
-        else 
-            diff = elt_2 - elt_1;
+        diff = elt_1 - elt_2;
         
         maxHeap.push(diff);
     }

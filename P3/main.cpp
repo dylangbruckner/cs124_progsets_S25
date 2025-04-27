@@ -1,9 +1,6 @@
-
 #include <iostream>
 #include <fstream>
-#include "annealing.hpp"
-#include "karmakar.hpp"
-#include "hill.hpp"
+#include "experiments.hpp"
 
 // flag:
 // 0 normal operations (as defined in progset description)
@@ -11,6 +8,8 @@
 // 2+ unused
 
 const size_t MAX_ITER = 25000;
+const size_t INPUT_SIZE = 100;
+const size_t NUM_TRIALS = 50;
 
 int main(int argc, char** argv) {
     // make sure we have correct args
@@ -33,7 +32,7 @@ int main(int argc, char** argv) {
         int algo = std::stoi(argv[2]);
         std::ifstream file(argv[3]);
 
-        if (!file.is_open()) {
+        if (!file.is_open() && flag != 1) {
             std::cerr << "Error: Could not open file " << argv[3] << ".\n";
             return 1;
         }
@@ -74,9 +73,16 @@ int main(int argc, char** argv) {
             return 0;
         }
     } else if (flag == 1) { // experiments
+        std::vector<uint64_t> residues = experiments(INPUT_SIZE, NUM_TRIALS, MAX_ITER);
 
-
-
+        std::cout << "Residues from experiments:" << std::endl;
+        std::cout << "karmarkar: " << residues[0] << std::endl;
+        std::cout << "repeated: " << residues[1] << std::endl;
+        std::cout << "r-prepar: " << residues[2] << std::endl;
+        std::cout << "climbing: " << residues[3] << std::endl;
+        std::cout << "c-prepar: " << residues[4] << std::endl;
+        std::cout << "annealing: " << residues[5] << std::endl;
+        std::cout << "a-prepar: " << residues[6] << std::endl;
 
     } else {
         std::cerr << "Flag \"" << flag << "\" not recognized"; 
