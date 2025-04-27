@@ -33,16 +33,20 @@ std::vector<uint64_t> experiments(const size_t n, const size_t num_trials, const
         output[0] += karmarkar_karp(problem) * (1 / num_trials);
 
         // Run repeated random
-        output[1] += repeated_random(problem, max_iter, false) * (1 / num_trials);
-        output[2] += repeated_random(problem, max_iter, true) * (1 / num_trials);
+        output[1] += repeated_random(problem, max_iter, false);
+        output[2] += repeated_random(problem, max_iter, true);
 
         // Run hill climbing
-        output[3] += hill_climbing(problem, max_iter, false) * (1 / num_trials);
-        output[4] += hill_climbing(problem, max_iter, true) * (1 / num_trials);
+        output[3] += hill_climbing(problem, max_iter, false);
+        output[4] += hill_climbing(problem, max_iter, true);
 
         // Run simulatd annealing
-        output[5] += simulated_annealing(problem, max_iter, false) * (1 / num_trials);
-        output[6] += simulated_annealing(problem, max_iter, true) * (1 / num_trials);
+        output[5] += simulated_annealing(problem, max_iter, false);
+        output[6] += simulated_annealing(problem, max_iter, true);
+    }
+
+    for (size_t i = 0; i < 7; ++i) {
+        output[i] = output[i] / num_trials;
     }
     // Output it all 
     return output;
