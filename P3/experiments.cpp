@@ -30,7 +30,7 @@ std::vector<uint64_t> experiments(const size_t n, const size_t num_trials, const
     for (size_t i = 0; i < num_trials; ++i) {
         std::vector<int64_t> problem = problemInstance(n);
         // Run KK
-        output[0] += karmarkar_karp(problem) * (1 / num_trials);
+        output[0] += karmarkar_karp(problem);
 
         // Run repeated random
         output[1] += repeated_random(problem, max_iter, false);
