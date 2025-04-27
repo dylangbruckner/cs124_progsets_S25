@@ -2,31 +2,48 @@
 
 std::uint64_t repeated_random(std::vector<std::int64_t>& input, const size_t max_iter, const bool prepartitioned) {
     size_t n = input.size();
+    std::uint64_t temp_residue;
+
     if (prepartitioned) {
         std::vector<size_t> S = generate_random_prepartition(n);
         std::vector<size_t> temp;
+        std::uint64_t current_residue = calculate_residue_partition(input, S);
 
         for (size_t i = 0; i < max_iter; ++i) {
             temp = generate_random_prepartition(n);
-
-            if (calculate_residue_partition(input, temp) < calculate_residue_partition(input, S)) {
+            temp_residue = calculate_residue_partition(input, temp);
+            
+            if (temp_residue < current_residue) {
                 S = temp;
+                current_residue = temp_residue;
+                if (current_residue == 0) {
+                    return current_residue;
+                }
             }
         }
+        return current_residue;
 
     } else {
         std::vector<int> S = generateRandom(n);
         std::vector<int> temp;
+        std::uint64_t current_residue = calculate_residue_unsigned(input, S);
+
 
         for (size_t i = 0; i < max_iter; ++i) {
             temp = generateRandom(n);
+            temp_residue = calculate_residue_unsigned(input, temp);
+
             
-            if (calculate_residue_unsigned(input, temp) < calculate_residue_unsigned(input, S)) {
+            if (temp_residue < current_residue) {
                 S = temp;
+                current_residue = temp_residue;
+                if (current_residue == 0) {
+                    return current_residue;
+                }
             }
         }
 
-        return calculate_residue_unsigned(input, S);
+        return current_residue;
     }
 }
 
