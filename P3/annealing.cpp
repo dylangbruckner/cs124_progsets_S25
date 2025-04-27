@@ -6,7 +6,7 @@ std::uint64_t simulated_annealing(const std::vector<std::int64_t>& input, const 
     // random generators for moves 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<size_t> dist(1, n);
+    std::uniform_int_distribution<size_t> dist(0, n-1);
     std::uniform_real_distribution<float> real(0.0, 1.0);
 
     // early declerations

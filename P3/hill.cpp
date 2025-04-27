@@ -7,7 +7,7 @@ std::uint64_t hill_climbing(const std::vector<std::int64_t>& input, const size_t
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> real(0.0, 1.0);
-    std::uniform_int_distribution<size_t> dist(1, n);
+    std::uniform_int_distribution<size_t> dist(0, n-1);
     
     // early decleratoins
     size_t j;
