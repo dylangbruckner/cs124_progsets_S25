@@ -74,6 +74,7 @@ int main(int argc, char** argv) {
         }
     } else if (flag == 1) { // experiments
         std::vector<uint64_t> residues = experiments(INPUT_SIZE, NUM_TRIALS, MAX_ITER);
+        std::vector<uint64_t> times = experiment_times(INPUT_SIZE, NUM_TRIALS, MAX_ITER);
 
         std::cout << "Residues from experiments:" << std::endl;
         std::cout << "karmarkar: " << residues[0] << std::endl;
@@ -83,6 +84,17 @@ int main(int argc, char** argv) {
         std::cout << "c-prepar: " << residues[4] << std::endl;
         std::cout << "annealing: " << residues[5] << std::endl;
         std::cout << "a-prepar: " << residues[6] << std::endl;
+
+        std::cout << "-------------------------------------" << std::endl;
+
+        std::cout << "Times from experiments:" << std::endl;
+        std::cout << "karmarkar: " << times[0] << std::endl;
+        std::cout << "repeated: " << times[1] << std::endl;
+        std::cout << "r-prepar: " << times[2] << std::endl;
+        std::cout << "climbing: " << times[3] << std::endl;
+        std::cout << "c-prepar: " << times[4] << std::endl;
+        std::cout << "annealing: " << times[5] << std::endl;
+        std::cout << "a-prepar: " << times[6] << std::endl;
 
     } else {
         std::cerr << "Flag \"" << flag << "\" not recognized"; 
